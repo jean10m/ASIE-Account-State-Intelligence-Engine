@@ -1,0 +1,1056 @@
+[
+  {
+    "account_id": "WS00010",
+    "account_type": "TFSA",
+    "flags": [
+      {
+        "check": "NOVEL_TFSA_TRACKER_LAG",
+        "security_id": "TFSA_CONTRIBUTION_TRACKER",
+        "detail": "Deposit of $1,315.43 processed to cash balance but contribution room tracker not updated. Cross-system desync between core banking and contribution tracker microservice. True room remaining is $1,891.61 but tracker shows $3,207.04. Next deposit will be based on incorrect room data.",
+        "magnitude": 1315.43
+      }
+    ],
+    "total_market_value": 6605.65,
+    "anomaly_pattern": "NOVEL_TFSA_TRACKER_LAG"
+  },
+  {
+    "account_id": "WS00013",
+    "account_type": "Personal",
+    "flags": [
+      {
+        "check": "STALE_PRICING",
+        "security_id": "XEQT.TO",
+        "detail": "XEQT.TO position valued at yesterday NAV of $29.22 while current NAV is $29.55 \u2014 a 1.13% drift. Position market value understated by $33.39.",
+        "magnitude": 1.13
+      }
+    ],
+    "total_market_value": 7184.8,
+    "anomaly_pattern": "STALE_PRICING"
+  },
+  {
+    "account_id": "WS00017",
+    "account_type": "Personal",
+    "flags": [
+      {
+        "check": "STALE_PRICING",
+        "security_id": "XEQT.TO",
+        "detail": "XEQT.TO position valued at yesterday NAV of $29.22 while current NAV is $29.55 \u2014 a 1.13% drift. Position market value understated by $69.49.",
+        "magnitude": 1.13
+      }
+    ],
+    "total_market_value": 30718.37,
+    "anomaly_pattern": "STALE_PRICING"
+  },
+  {
+    "account_id": "WS00025",
+    "account_type": "TFSA",
+    "flags": [
+      {
+        "check": "NOVEL_TFSA_TRACKER_LAG",
+        "security_id": "TFSA_CONTRIBUTION_TRACKER",
+        "detail": "Deposit of $1,790.84 processed to cash balance but contribution room tracker not updated. Cross-system desync between core banking and contribution tracker microservice. True room remaining is $4,139.02 but tracker shows $5,929.86. Next deposit will be based on incorrect room data.",
+        "magnitude": 1790.84
+      }
+    ],
+    "total_market_value": 17886.52,
+    "anomaly_pattern": "NOVEL_TFSA_TRACKER_LAG"
+  },
+  {
+    "account_id": "WS00027",
+    "account_type": "TFSA",
+    "flags": [
+      {
+        "check": "PARTIAL_SETTLEMENT",
+        "security_id": "XEF.TO",
+        "detail": "Position updated for XEF.TO but cash debit not cleared. Settlement status PENDING with negative pending cash of $14,094.14. Position exists in account confirming trade executed. Three-way inconsistency detected.",
+        "magnitude": 14094.14
+      }
+    ],
+    "total_market_value": 33705.7,
+    "anomaly_pattern": "PARTIAL_SETTLEMENT"
+  },
+  {
+    "account_id": "WS00034",
+    "account_type": "Personal",
+    "flags": [
+      {
+        "check": "STALE_PRICING",
+        "security_id": "XEQT.TO",
+        "detail": "XEQT.TO position valued at yesterday NAV of $29.22 while current NAV is $29.55 \u2014 a 1.13% drift. Position market value understated by $128.29.",
+        "magnitude": 1.13
+      }
+    ],
+    "total_market_value": 27318.64,
+    "anomaly_pattern": "STALE_PRICING"
+  },
+  {
+    "account_id": "WS00041",
+    "account_type": "Personal",
+    "flags": [
+      {
+        "check": "FRACTIONAL_ROUNDING",
+        "security_id": "VFV.TO",
+        "detail": "OMS records 3.8526 units of VFV.TO but position system records 3.85 units. Discrepancy of 0.0026 units = $0.3077 at current NAV of $118.33.",
+        "magnitude": 0.3077
+      }
+    ],
+    "total_market_value": 5806.28,
+    "anomaly_pattern": "FRACTIONAL_ROUNDING"
+  },
+  {
+    "account_id": "WS00044",
+    "account_type": "RRSP",
+    "flags": [
+      {
+        "check": "STALE_PRICING",
+        "security_id": "XEQT.TO",
+        "detail": "XEQT.TO position valued at yesterday NAV of $29.22 while current NAV is $29.55 \u2014 a 1.13% drift. Position market value understated by $107.34.",
+        "magnitude": 1.13
+      }
+    ],
+    "total_market_value": 15169.42,
+    "anomaly_pattern": "STALE_PRICING"
+  },
+  {
+    "account_id": "WS00065",
+    "account_type": "RRSP",
+    "flags": [
+      {
+        "check": "FRACTIONAL_ROUNDING",
+        "security_id": "VFV.TO",
+        "detail": "OMS records 218.8962 units of VFV.TO but position system records 218.9 units. Discrepancy of 0.0038 units = $0.4497 at current NAV of $118.33.",
+        "magnitude": 0.4497
+      }
+    ],
+    "total_market_value": 33860.63,
+    "anomaly_pattern": "FRACTIONAL_ROUNDING"
+  },
+  {
+    "account_id": "WS00070",
+    "account_type": "TFSA",
+    "flags": [
+      {
+        "check": "STALE_PRICING",
+        "security_id": "XEQT.TO",
+        "detail": "XEQT.TO position valued at yesterday NAV of $29.22 while current NAV is $29.55 \u2014 a 1.13% drift. Position market value understated by $31.16.",
+        "magnitude": 1.13
+      }
+    ],
+    "total_market_value": 21157.49,
+    "anomaly_pattern": "STALE_PRICING"
+  },
+  {
+    "account_id": "WS00071",
+    "account_type": "RRSP",
+    "flags": [
+      {
+        "check": "PARTIAL_SETTLEMENT",
+        "security_id": "XEF.TO",
+        "detail": "Position updated for XEF.TO but cash debit not cleared. Settlement status PENDING with negative pending cash of $10,122.55. Position exists in account confirming trade executed. Three-way inconsistency detected.",
+        "magnitude": 10122.55
+      },
+      {
+        "check": "STALE_PRICING",
+        "security_id": "XEQT.TO",
+        "detail": "XEQT.TO position valued at yesterday NAV of $29.22 while current NAV is $29.55 \u2014 a 1.13% drift. Position market value understated by $74.28.",
+        "magnitude": 1.13
+      }
+    ],
+    "total_market_value": 25728.1,
+    "anomaly_pattern": "STALE_PRICING"
+  },
+  {
+    "account_id": "WS00077",
+    "account_type": "RRSP",
+    "flags": [
+      {
+        "check": "FRACTIONAL_ROUNDING",
+        "security_id": "VFV.TO",
+        "detail": "OMS records 88.5447 units of VFV.TO but position system records 88.54 units. Discrepancy of 0.0047 units = $0.5562 at current NAV of $118.33.",
+        "magnitude": 0.5562
+      }
+    ],
+    "total_market_value": 20765.53,
+    "anomaly_pattern": "FRACTIONAL_ROUNDING"
+  },
+  {
+    "account_id": "WS00084",
+    "account_type": "Personal",
+    "flags": [
+      {
+        "check": "STALE_PRICING",
+        "security_id": "XEQT.TO",
+        "detail": "XEQT.TO position valued at yesterday NAV of $29.22 while current NAV is $29.55 \u2014 a 1.13% drift. Position market value understated by $188.45.",
+        "magnitude": 1.13
+      }
+    ],
+    "total_market_value": 28682.77,
+    "anomaly_pattern": "STALE_PRICING"
+  },
+  {
+    "account_id": "WS00090",
+    "account_type": "Personal",
+    "flags": [
+      {
+        "check": "STALE_PRICING",
+        "security_id": "XEQT.TO",
+        "detail": "XEQT.TO position valued at yesterday NAV of $29.22 while current NAV is $29.55 \u2014 a 1.13% drift. Position market value understated by $30.01.",
+        "magnitude": 1.13
+      },
+      {
+        "check": "FRACTIONAL_ROUNDING",
+        "security_id": "VFV.TO",
+        "detail": "OMS records 147.348 units of VFV.TO but position system records 147.35 units. Discrepancy of 0.002 units = $0.2367 at current NAV of $118.33.",
+        "magnitude": 0.2367
+      }
+    ],
+    "total_market_value": 29514.92,
+    "anomaly_pattern": "FRACTIONAL_ROUNDING"
+  },
+  {
+    "account_id": "WS00095",
+    "account_type": "TFSA",
+    "flags": [
+      {
+        "check": "PARTIAL_SETTLEMENT",
+        "security_id": "XEF.TO",
+        "detail": "Position updated for XEF.TO but cash debit not cleared. Settlement status PENDING with negative pending cash of $7,881.12. Position exists in account confirming trade executed. Three-way inconsistency detected.",
+        "magnitude": 7881.12
+      }
+    ],
+    "total_market_value": 25840.64,
+    "anomaly_pattern": "PARTIAL_SETTLEMENT"
+  },
+  {
+    "account_id": "WS00104",
+    "account_type": "Personal",
+    "flags": [
+      {
+        "check": "STALE_PRICING",
+        "security_id": "XEQT.TO",
+        "detail": "XEQT.TO position valued at yesterday NAV of $29.22 while current NAV is $29.55 \u2014 a 1.13% drift. Position market value understated by $312.96.",
+        "magnitude": 1.13
+      }
+    ],
+    "total_market_value": 27711.19,
+    "anomaly_pattern": "STALE_PRICING"
+  },
+  {
+    "account_id": "WS00105",
+    "account_type": "TFSA",
+    "flags": [
+      {
+        "check": "STALE_PRICING",
+        "security_id": "XEQT.TO",
+        "detail": "XEQT.TO position valued at yesterday NAV of $29.22 while current NAV is $29.55 \u2014 a 1.13% drift. Position market value understated by $142.74.",
+        "magnitude": 1.13
+      }
+    ],
+    "total_market_value": 12638.99,
+    "anomaly_pattern": "STALE_PRICING"
+  },
+  {
+    "account_id": "WS00107",
+    "account_type": "TFSA",
+    "flags": [
+      {
+        "check": "NOVEL_TFSA_TRACKER_LAG",
+        "security_id": "TFSA_CONTRIBUTION_TRACKER",
+        "detail": "Deposit of $1,801.49 processed to cash balance but contribution room tracker not updated. Cross-system desync between core banking and contribution tracker microservice. True room remaining is $59.08 but tracker shows $1,860.57. Next deposit will be based on incorrect room data.",
+        "magnitude": 1801.49
+      }
+    ],
+    "total_market_value": 33916.96,
+    "anomaly_pattern": "NOVEL_TFSA_TRACKER_LAG"
+  },
+  {
+    "account_id": "WS00110",
+    "account_type": "TFSA",
+    "flags": [
+      {
+        "check": "STALE_PRICING",
+        "security_id": "XEQT.TO",
+        "detail": "XEQT.TO position valued at yesterday NAV of $29.22 while current NAV is $29.55 \u2014 a 1.13% drift. Position market value understated by $7.95.",
+        "magnitude": 1.13
+      }
+    ],
+    "total_market_value": 6603.74,
+    "anomaly_pattern": "STALE_PRICING"
+  },
+  {
+    "account_id": "WS00113",
+    "account_type": "Personal",
+    "flags": [
+      {
+        "check": "PARTIAL_SETTLEMENT",
+        "security_id": "XEF.TO",
+        "detail": "Position updated for XEF.TO but cash debit not cleared. Settlement status PENDING with negative pending cash of $1,331.11. Position exists in account confirming trade executed. Three-way inconsistency detected.",
+        "magnitude": 1331.11
+      }
+    ],
+    "total_market_value": 8262.58,
+    "anomaly_pattern": "PARTIAL_SETTLEMENT"
+  },
+  {
+    "account_id": "WS00137",
+    "account_type": "RRSP",
+    "flags": [
+      {
+        "check": "PARTIAL_SETTLEMENT",
+        "security_id": "XEF.TO",
+        "detail": "Position updated for XEF.TO but cash debit not cleared. Settlement status PENDING with negative pending cash of $15,828.01. Position exists in account confirming trade executed. Three-way inconsistency detected.",
+        "magnitude": 15828.01
+      }
+    ],
+    "total_market_value": 33885.76,
+    "anomaly_pattern": "PARTIAL_SETTLEMENT"
+  },
+  {
+    "account_id": "WS00141",
+    "account_type": "TFSA",
+    "flags": [
+      {
+        "check": "STALE_PRICING",
+        "security_id": "XEQT.TO",
+        "detail": "XEQT.TO position valued at yesterday NAV of $29.22 while current NAV is $29.55 \u2014 a 1.13% drift. Position market value understated by $76.73.",
+        "magnitude": 1.13
+      }
+    ],
+    "total_market_value": 32422.32,
+    "anomaly_pattern": "STALE_PRICING"
+  },
+  {
+    "account_id": "WS00144",
+    "account_type": "RRSP",
+    "flags": [
+      {
+        "check": "FRACTIONAL_ROUNDING",
+        "security_id": "VFV.TO",
+        "detail": "OMS records 197.0945 units of VFV.TO but position system records 197.09 units. Discrepancy of 0.0045 units = $0.5325 at current NAV of $118.33.",
+        "magnitude": 0.5325
+      }
+    ],
+    "total_market_value": 23322.19,
+    "anomaly_pattern": "FRACTIONAL_ROUNDING"
+  },
+  {
+    "account_id": "WS00146",
+    "account_type": "TFSA",
+    "flags": [
+      {
+        "check": "PARTIAL_SETTLEMENT",
+        "security_id": "XEF.TO",
+        "detail": "Position updated for XEF.TO but cash debit not cleared. Settlement status PENDING with negative pending cash of $5,986.71. Position exists in account confirming trade executed. Three-way inconsistency detected.",
+        "magnitude": 5986.71
+      }
+    ],
+    "total_market_value": 20412.79,
+    "anomaly_pattern": "PARTIAL_SETTLEMENT"
+  },
+  {
+    "account_id": "WS00155",
+    "account_type": "Personal",
+    "flags": [
+      {
+        "check": "STALE_PRICING",
+        "security_id": "XEQT.TO",
+        "detail": "XEQT.TO position valued at yesterday NAV of $29.22 while current NAV is $29.55 \u2014 a 1.13% drift. Position market value understated by $175.58.",
+        "magnitude": 1.13
+      }
+    ],
+    "total_market_value": 29738.87,
+    "anomaly_pattern": "STALE_PRICING"
+  },
+  {
+    "account_id": "WS00159",
+    "account_type": "Personal",
+    "flags": [
+      {
+        "check": "STALE_PRICING",
+        "security_id": "XEQT.TO",
+        "detail": "XEQT.TO position valued at yesterday NAV of $29.22 while current NAV is $29.55 \u2014 a 1.13% drift. Position market value understated by $22.02.",
+        "magnitude": 1.13
+      }
+    ],
+    "total_market_value": 5996.33,
+    "anomaly_pattern": "STALE_PRICING"
+  },
+  {
+    "account_id": "WS00164",
+    "account_type": "RRSP",
+    "flags": [
+      {
+        "check": "STALE_PRICING",
+        "security_id": "XEQT.TO",
+        "detail": "XEQT.TO position valued at yesterday NAV of $29.22 while current NAV is $29.55 \u2014 a 1.13% drift. Position market value understated by $312.93.",
+        "magnitude": 1.13
+      }
+    ],
+    "total_market_value": 27708.23,
+    "anomaly_pattern": "STALE_PRICING"
+  },
+  {
+    "account_id": "WS00175",
+    "account_type": "Personal",
+    "flags": [
+      {
+        "check": "STALE_PRICING",
+        "security_id": "XEQT.TO",
+        "detail": "XEQT.TO position valued at yesterday NAV of $29.22 while current NAV is $29.55 \u2014 a 1.13% drift. Position market value understated by $104.03.",
+        "magnitude": 1.13
+      }
+    ],
+    "total_market_value": 32139.28,
+    "anomaly_pattern": "STALE_PRICING"
+  },
+  {
+    "account_id": "WS00177",
+    "account_type": "TFSA",
+    "flags": [
+      {
+        "check": "NOVEL_TFSA_TRACKER_LAG",
+        "security_id": "TFSA_CONTRIBUTION_TRACKER",
+        "detail": "Deposit of $1,350.05 processed to cash balance but contribution room tracker not updated. Cross-system desync between core banking and contribution tracker microservice. True room remaining is $3,304.12 but tracker shows $4,654.17. Next deposit will be based on incorrect room data.",
+        "magnitude": 1350.05
+      }
+    ],
+    "total_market_value": 34509.37,
+    "anomaly_pattern": "NOVEL_TFSA_TRACKER_LAG"
+  },
+  {
+    "account_id": "WS00178",
+    "account_type": "RRSP",
+    "flags": [
+      {
+        "check": "PARTIAL_SETTLEMENT",
+        "security_id": "XEF.TO",
+        "detail": "Position updated for XEF.TO but cash debit not cleared. Settlement status PENDING with negative pending cash of $2,922.62. Position exists in account confirming trade executed. Three-way inconsistency detected.",
+        "magnitude": 2922.62
+      }
+    ],
+    "total_market_value": 4169.69,
+    "anomaly_pattern": "PARTIAL_SETTLEMENT"
+  },
+  {
+    "account_id": "WS00209",
+    "account_type": "RRSP",
+    "flags": [
+      {
+        "check": "FRACTIONAL_ROUNDING",
+        "security_id": "VFV.TO",
+        "detail": "OMS records 10.807 units of VFV.TO but position system records 10.81 units. Discrepancy of 0.003 units = $0.355 at current NAV of $118.33.",
+        "magnitude": 0.355
+      }
+    ],
+    "total_market_value": 8362.81,
+    "anomaly_pattern": "FRACTIONAL_ROUNDING"
+  },
+  {
+    "account_id": "WS00211",
+    "account_type": "TFSA",
+    "flags": [
+      {
+        "check": "PARTIAL_SETTLEMENT",
+        "security_id": "XEF.TO",
+        "detail": "Position updated for XEF.TO but cash debit not cleared. Settlement status PENDING with negative pending cash of $793.41. Position exists in account confirming trade executed. Three-way inconsistency detected.",
+        "magnitude": 793.41
+      }
+    ],
+    "total_market_value": 17755.99,
+    "anomaly_pattern": "PARTIAL_SETTLEMENT"
+  },
+  {
+    "account_id": "WS00212",
+    "account_type": "Personal",
+    "flags": [
+      {
+        "check": "STALE_PRICING",
+        "security_id": "XEQT.TO",
+        "detail": "XEQT.TO position valued at yesterday NAV of $29.22 while current NAV is $29.55 \u2014 a 1.13% drift. Position market value understated by $263.24.",
+        "magnitude": 1.13
+      }
+    ],
+    "total_market_value": 23308.31,
+    "anomaly_pattern": "STALE_PRICING"
+  },
+  {
+    "account_id": "WS00218",
+    "account_type": "Personal",
+    "flags": [
+      {
+        "check": "STALE_PRICING",
+        "security_id": "XEQT.TO",
+        "detail": "XEQT.TO position valued at yesterday NAV of $29.22 while current NAV is $29.55 \u2014 a 1.13% drift. Position market value understated by $21.80.",
+        "magnitude": 1.13
+      }
+    ],
+    "total_market_value": 10375.29,
+    "anomaly_pattern": "STALE_PRICING"
+  },
+  {
+    "account_id": "WS00219",
+    "account_type": "Personal",
+    "flags": [
+      {
+        "check": "PARTIAL_SETTLEMENT",
+        "security_id": "XEF.TO",
+        "detail": "Position updated for XEF.TO but cash debit not cleared. Settlement status PENDING with negative pending cash of $34,542.53. Position exists in account confirming trade executed. Three-way inconsistency detected.",
+        "magnitude": 34542.53
+      }
+    ],
+    "total_market_value": 34542.53,
+    "anomaly_pattern": "PARTIAL_SETTLEMENT"
+  },
+  {
+    "account_id": "WS00223",
+    "account_type": "TFSA",
+    "flags": [
+      {
+        "check": "NOVEL_TFSA_TRACKER_LAG",
+        "security_id": "TFSA_CONTRIBUTION_TRACKER",
+        "detail": "Deposit of $1,398.02 processed to cash balance but contribution room tracker not updated. Cross-system desync between core banking and contribution tracker microservice. True room remaining is $4,011.21 but tracker shows $5,409.23. Next deposit will be based on incorrect room data.",
+        "magnitude": 1398.02
+      }
+    ],
+    "total_market_value": 4220.6,
+    "anomaly_pattern": "NOVEL_TFSA_TRACKER_LAG"
+  },
+  {
+    "account_id": "WS00230",
+    "account_type": "TFSA",
+    "flags": [
+      {
+        "check": "PARTIAL_SETTLEMENT",
+        "security_id": "XEF.TO",
+        "detail": "Position updated for XEF.TO but cash debit not cleared. Settlement status PENDING with negative pending cash of $12,898.87. Position exists in account confirming trade executed. Three-way inconsistency detected.",
+        "magnitude": 12898.87
+      }
+    ],
+    "total_market_value": 30830.19,
+    "anomaly_pattern": "PARTIAL_SETTLEMENT"
+  },
+  {
+    "account_id": "WS00238",
+    "account_type": "TFSA",
+    "flags": [
+      {
+        "check": "STALE_PRICING",
+        "security_id": "XEQT.TO",
+        "detail": "XEQT.TO position valued at yesterday NAV of $29.22 while current NAV is $29.55 \u2014 a 1.13% drift. Position market value understated by $36.04.",
+        "magnitude": 1.13
+      }
+    ],
+    "total_market_value": 6947.94,
+    "anomaly_pattern": "STALE_PRICING"
+  },
+  {
+    "account_id": "WS00247",
+    "account_type": "TFSA",
+    "flags": [
+      {
+        "check": "STALE_PRICING",
+        "security_id": "XEQT.TO",
+        "detail": "XEQT.TO position valued at yesterday NAV of $29.22 while current NAV is $29.55 \u2014 a 1.13% drift. Position market value understated by $15.78.",
+        "magnitude": 1.13
+      }
+    ],
+    "total_market_value": 9919.8,
+    "anomaly_pattern": "STALE_PRICING"
+  },
+  {
+    "account_id": "WS00257",
+    "account_type": "TFSA",
+    "flags": [
+      {
+        "check": "STALE_PRICING",
+        "security_id": "XEQT.TO",
+        "detail": "XEQT.TO position valued at yesterday NAV of $29.22 while current NAV is $29.55 \u2014 a 1.13% drift. Position market value understated by $37.55.",
+        "magnitude": 1.13
+      }
+    ],
+    "total_market_value": 17769.77,
+    "anomaly_pattern": "STALE_PRICING"
+  },
+  {
+    "account_id": "WS00270",
+    "account_type": "TFSA",
+    "flags": [
+      {
+        "check": "NOVEL_TFSA_TRACKER_LAG",
+        "security_id": "TFSA_CONTRIBUTION_TRACKER",
+        "detail": "Deposit of $1,296.71 processed to cash balance but contribution room tracker not updated. Cross-system desync between core banking and contribution tracker microservice. True room remaining is $446.55 but tracker shows $1,743.26. Next deposit will be based on incorrect room data.",
+        "magnitude": 1296.71
+      }
+    ],
+    "total_market_value": 21539.98,
+    "anomaly_pattern": "NOVEL_TFSA_TRACKER_LAG"
+  },
+  {
+    "account_id": "WS00272",
+    "account_type": "Personal",
+    "flags": [
+      {
+        "check": "PARTIAL_SETTLEMENT",
+        "security_id": "XEF.TO",
+        "detail": "Position updated for XEF.TO but cash debit not cleared. Settlement status PENDING with negative pending cash of $3,247.60. Position exists in account confirming trade executed. Three-way inconsistency detected.",
+        "magnitude": 3247.6
+      }
+    ],
+    "total_market_value": 13617.14,
+    "anomaly_pattern": "PARTIAL_SETTLEMENT"
+  },
+  {
+    "account_id": "WS00277",
+    "account_type": "TFSA",
+    "flags": [
+      {
+        "check": "STALE_PRICING",
+        "security_id": "XEQT.TO",
+        "detail": "XEQT.TO position valued at yesterday NAV of $29.22 while current NAV is $29.55 \u2014 a 1.13% drift. Position market value understated by $45.59.",
+        "magnitude": 1.13
+      }
+    ],
+    "total_market_value": 11024.56,
+    "anomaly_pattern": "STALE_PRICING"
+  },
+  {
+    "account_id": "WS00280",
+    "account_type": "TFSA",
+    "flags": [
+      {
+        "check": "FRACTIONAL_ROUNDING",
+        "security_id": "VFV.TO",
+        "detail": "OMS records 98.1618 units of VFV.TO but position system records 98.16 units. Discrepancy of 0.0018 units = $0.213 at current NAV of $118.33.",
+        "magnitude": 0.213
+      }
+    ],
+    "total_market_value": 24741.41,
+    "anomaly_pattern": "FRACTIONAL_ROUNDING"
+  },
+  {
+    "account_id": "WS00300",
+    "account_type": "TFSA",
+    "flags": [
+      {
+        "check": "FRACTIONAL_ROUNDING",
+        "security_id": "VFV.TO",
+        "detail": "OMS records 62.5082 units of VFV.TO but position system records 62.51 units. Discrepancy of 0.0018 units = $0.213 at current NAV of $118.33.",
+        "magnitude": 0.213
+      }
+    ],
+    "total_market_value": 34152.35,
+    "anomaly_pattern": "FRACTIONAL_ROUNDING"
+  },
+  {
+    "account_id": "WS00306",
+    "account_type": "RRSP",
+    "flags": [
+      {
+        "check": "STALE_PRICING",
+        "security_id": "XEQT.TO",
+        "detail": "XEQT.TO position valued at yesterday NAV of $29.22 while current NAV is $29.55 \u2014 a 1.13% drift. Position market value understated by $17.62.",
+        "magnitude": 1.13
+      }
+    ],
+    "total_market_value": 10401.21,
+    "anomaly_pattern": "STALE_PRICING"
+  },
+  {
+    "account_id": "WS00311",
+    "account_type": "TFSA",
+    "flags": [
+      {
+        "check": "PARTIAL_SETTLEMENT",
+        "security_id": "XEF.TO",
+        "detail": "Position updated for XEF.TO but cash debit not cleared. Settlement status PENDING with negative pending cash of $5,191.68. Position exists in account confirming trade executed. Three-way inconsistency detected.",
+        "magnitude": 5191.68
+      }
+    ],
+    "total_market_value": 20603.38,
+    "anomaly_pattern": "PARTIAL_SETTLEMENT"
+  },
+  {
+    "account_id": "WS00315",
+    "account_type": "Personal",
+    "flags": [
+      {
+        "check": "PARTIAL_SETTLEMENT",
+        "security_id": "XEF.TO",
+        "detail": "Position updated for XEF.TO but cash debit not cleared. Settlement status PENDING with negative pending cash of $3,227.29. Position exists in account confirming trade executed. Three-way inconsistency detected.",
+        "magnitude": 3227.29
+      }
+    ],
+    "total_market_value": 18678.61,
+    "anomaly_pattern": "PARTIAL_SETTLEMENT"
+  },
+  {
+    "account_id": "WS00318",
+    "account_type": "TFSA",
+    "flags": [
+      {
+        "check": "STALE_PRICING",
+        "security_id": "XEQT.TO",
+        "detail": "XEQT.TO position valued at yesterday NAV of $29.22 while current NAV is $29.55 \u2014 a 1.13% drift. Position market value understated by $18.71.",
+        "magnitude": 1.13
+      }
+    ],
+    "total_market_value": 19666.47,
+    "anomaly_pattern": "STALE_PRICING"
+  },
+  {
+    "account_id": "WS00320",
+    "account_type": "TFSA",
+    "flags": [
+      {
+        "check": "PARTIAL_SETTLEMENT",
+        "security_id": "XEF.TO",
+        "detail": "Position updated for XEF.TO but cash debit not cleared. Settlement status PENDING with negative pending cash of $7,585.46. Position exists in account confirming trade executed. Three-way inconsistency detected.",
+        "magnitude": 7585.46
+      }
+    ],
+    "total_market_value": 24348.72,
+    "anomaly_pattern": "PARTIAL_SETTLEMENT"
+  },
+  {
+    "account_id": "WS00322",
+    "account_type": "TFSA",
+    "flags": [
+      {
+        "check": "NOVEL_TFSA_TRACKER_LAG",
+        "security_id": "TFSA_CONTRIBUTION_TRACKER",
+        "detail": "Deposit of $1,314.10 processed to cash balance but contribution room tracker not updated. Cross-system desync between core banking and contribution tracker microservice. True room remaining is $1,876.13 but tracker shows $3,190.23. Next deposit will be based on incorrect room data.",
+        "magnitude": 1314.1
+      }
+    ],
+    "total_market_value": 24649.55,
+    "anomaly_pattern": "NOVEL_TFSA_TRACKER_LAG"
+  },
+  {
+    "account_id": "WS00330",
+    "account_type": "RRSP",
+    "flags": [
+      {
+        "check": "FRACTIONAL_ROUNDING",
+        "security_id": "VFV.TO",
+        "detail": "OMS records 19.2055 units of VFV.TO but position system records 19.21 units. Discrepancy of 0.0045 units = $0.5325 at current NAV of $118.33.",
+        "magnitude": 0.5325
+      }
+    ],
+    "total_market_value": 5304.43,
+    "anomaly_pattern": "FRACTIONAL_ROUNDING"
+  },
+  {
+    "account_id": "WS00331",
+    "account_type": "TFSA",
+    "flags": [
+      {
+        "check": "NOVEL_TFSA_TRACKER_LAG",
+        "security_id": "TFSA_CONTRIBUTION_TRACKER",
+        "detail": "Deposit of $1,202.59 processed to cash balance but contribution room tracker not updated. Cross-system desync between core banking and contribution tracker microservice. True room remaining is $1,243.76 but tracker shows $2,446.35. Next deposit will be based on incorrect room data.",
+        "magnitude": 1202.59
+      }
+    ],
+    "total_market_value": 21553.14,
+    "anomaly_pattern": "NOVEL_TFSA_TRACKER_LAG"
+  },
+  {
+    "account_id": "WS00345",
+    "account_type": "RRSP",
+    "flags": [
+      {
+        "check": "PARTIAL_SETTLEMENT",
+        "security_id": "XEF.TO",
+        "detail": "Position updated for XEF.TO but cash debit not cleared. Settlement status PENDING with negative pending cash of $3,700.38. Position exists in account confirming trade executed. Three-way inconsistency detected.",
+        "magnitude": 3700.38
+      }
+    ],
+    "total_market_value": 8829.45,
+    "anomaly_pattern": "PARTIAL_SETTLEMENT"
+  },
+  {
+    "account_id": "WS00351",
+    "account_type": "TFSA",
+    "flags": [
+      {
+        "check": "NOVEL_TFSA_TRACKER_LAG",
+        "security_id": "TFSA_CONTRIBUTION_TRACKER",
+        "detail": "Deposit of $985.52 processed to cash balance but contribution room tracker not updated. Cross-system desync between core banking and contribution tracker microservice. True room remaining is $5,448.80 but tracker shows $6,434.32. Next deposit will be based on incorrect room data.",
+        "magnitude": 985.52
+      }
+    ],
+    "total_market_value": 6882.31,
+    "anomaly_pattern": "NOVEL_TFSA_TRACKER_LAG"
+  },
+  {
+    "account_id": "WS00358",
+    "account_type": "Personal",
+    "flags": [
+      {
+        "check": "PARTIAL_SETTLEMENT",
+        "security_id": "XEF.TO",
+        "detail": "Position updated for XEF.TO but cash debit not cleared. Settlement status PENDING with negative pending cash of $7,667.76. Position exists in account confirming trade executed. Three-way inconsistency detected.",
+        "magnitude": 7667.76
+      }
+    ],
+    "total_market_value": 25415.79,
+    "anomaly_pattern": "PARTIAL_SETTLEMENT"
+  },
+  {
+    "account_id": "WS00361",
+    "account_type": "TFSA",
+    "flags": [
+      {
+        "check": "STALE_PRICING",
+        "security_id": "XEQT.TO",
+        "detail": "XEQT.TO position valued at yesterday NAV of $29.22 while current NAV is $29.55 \u2014 a 1.13% drift. Position market value understated by $8.73.",
+        "magnitude": 1.13
+      }
+    ],
+    "total_market_value": 7387.21,
+    "anomaly_pattern": "STALE_PRICING"
+  },
+  {
+    "account_id": "WS00364",
+    "account_type": "Personal",
+    "flags": [
+      {
+        "check": "STALE_PRICING",
+        "security_id": "XEQT.TO",
+        "detail": "XEQT.TO position valued at yesterday NAV of $29.22 while current NAV is $29.55 \u2014 a 1.13% drift. Position market value understated by $113.42.",
+        "magnitude": 1.13
+      }
+    ],
+    "total_market_value": 17036.01,
+    "anomaly_pattern": "STALE_PRICING"
+  },
+  {
+    "account_id": "WS00369",
+    "account_type": "RRSP",
+    "flags": [
+      {
+        "check": "FRACTIONAL_ROUNDING",
+        "security_id": "VFV.TO",
+        "detail": "OMS records 214.369 units of VFV.TO but position system records 214.37 units. Discrepancy of 0.001 units = $0.1183 at current NAV of $118.33.",
+        "magnitude": 0.1183
+      }
+    ],
+    "total_market_value": 25366.28,
+    "anomaly_pattern": "FRACTIONAL_ROUNDING"
+  },
+  {
+    "account_id": "WS00373",
+    "account_type": "RRSP",
+    "flags": [
+      {
+        "check": "STALE_PRICING",
+        "security_id": "XEQT.TO",
+        "detail": "XEQT.TO position valued at yesterday NAV of $29.22 while current NAV is $29.55 \u2014 a 1.13% drift. Position market value understated by $30.71.",
+        "magnitude": 1.13
+      }
+    ],
+    "total_market_value": 17273.39,
+    "anomaly_pattern": "STALE_PRICING"
+  },
+  {
+    "account_id": "WS00380",
+    "account_type": "RRSP",
+    "flags": [
+      {
+        "check": "FRACTIONAL_ROUNDING",
+        "security_id": "VFV.TO",
+        "detail": "OMS records 28.8775 units of VFV.TO but position system records 28.88 units. Discrepancy of 0.0025 units = $0.2958 at current NAV of $118.33.",
+        "magnitude": 0.2958
+      }
+    ],
+    "total_market_value": 31303.13,
+    "anomaly_pattern": "FRACTIONAL_ROUNDING"
+  },
+  {
+    "account_id": "WS00384",
+    "account_type": "RRSP",
+    "flags": [
+      {
+        "check": "STALE_PRICING",
+        "security_id": "XEQT.TO",
+        "detail": "XEQT.TO position valued at yesterday NAV of $29.22 while current NAV is $29.55 \u2014 a 1.13% drift. Position market value understated by $13.06.",
+        "magnitude": 1.13
+      }
+    ],
+    "total_market_value": 25148.59,
+    "anomaly_pattern": "STALE_PRICING"
+  },
+  {
+    "account_id": "WS00396",
+    "account_type": "TFSA",
+    "flags": [
+      {
+        "check": "STALE_PRICING",
+        "security_id": "XEQT.TO",
+        "detail": "XEQT.TO position valued at yesterday NAV of $29.22 while current NAV is $29.55 \u2014 a 1.13% drift. Position market value understated by $118.76.",
+        "magnitude": 1.13
+      }
+    ],
+    "total_market_value": 19011.53,
+    "anomaly_pattern": "STALE_PRICING"
+  },
+  {
+    "account_id": "WS00407",
+    "account_type": "TFSA",
+    "flags": [
+      {
+        "check": "NOVEL_TFSA_TRACKER_LAG",
+        "security_id": "TFSA_CONTRIBUTION_TRACKER",
+        "detail": "Deposit of $1,235.14 processed to cash balance but contribution room tracker not updated. Cross-system desync between core banking and contribution tracker microservice. IMMEDIATE REGULATORY RISK: Client over annual limit by $243.55. CRA 1% monthly penalty applies.",
+        "magnitude": 1235.14
+      }
+    ],
+    "total_market_value": 2144.56,
+    "anomaly_pattern": "NOVEL_TFSA_TRACKER_LAG"
+  },
+  {
+    "account_id": "WS00421",
+    "account_type": "Personal",
+    "flags": [
+      {
+        "check": "PARTIAL_SETTLEMENT",
+        "security_id": "XEF.TO",
+        "detail": "Position updated for XEF.TO but cash debit not cleared. Settlement status PENDING with negative pending cash of $12,099.19. Position exists in account confirming trade executed. Three-way inconsistency detected.",
+        "magnitude": 12099.19
+      },
+      {
+        "check": "STALE_PRICING",
+        "security_id": "XEQT.TO",
+        "detail": "XEQT.TO position valued at yesterday NAV of $29.22 while current NAV is $29.55 \u2014 a 1.13% drift. Position market value understated by $118.30.",
+        "magnitude": 1.13
+      }
+    ],
+    "total_market_value": 33462.29,
+    "anomaly_pattern": "STALE_PRICING"
+  },
+  {
+    "account_id": "WS00426",
+    "account_type": "RRSP",
+    "flags": [
+      {
+        "check": "PARTIAL_SETTLEMENT",
+        "security_id": "XEF.TO",
+        "detail": "Position updated for XEF.TO but cash debit not cleared. Settlement status PENDING with negative pending cash of $7,524.03. Position exists in account confirming trade executed. Three-way inconsistency detected.",
+        "magnitude": 7524.03
+      }
+    ],
+    "total_market_value": 7524.03,
+    "anomaly_pattern": "PARTIAL_SETTLEMENT"
+  },
+  {
+    "account_id": "WS00440",
+    "account_type": "TFSA",
+    "flags": [
+      {
+        "check": "PARTIAL_SETTLEMENT",
+        "security_id": "XEF.TO",
+        "detail": "Position updated for XEF.TO but cash debit not cleared. Settlement status PENDING with negative pending cash of $6,212.35. Position exists in account confirming trade executed. Three-way inconsistency detected.",
+        "magnitude": 6212.35
+      }
+    ],
+    "total_market_value": 31439.47,
+    "anomaly_pattern": "PARTIAL_SETTLEMENT"
+  },
+  {
+    "account_id": "WS00444",
+    "account_type": "Personal",
+    "flags": [
+      {
+        "check": "STALE_PRICING",
+        "security_id": "XEQT.TO",
+        "detail": "XEQT.TO position valued at yesterday NAV of $29.22 while current NAV is $29.55 \u2014 a 1.13% drift. Position market value understated by $25.02.",
+        "magnitude": 1.13
+      }
+    ],
+    "total_market_value": 9623.76,
+    "anomaly_pattern": "STALE_PRICING"
+  },
+  {
+    "account_id": "WS00450",
+    "account_type": "TFSA",
+    "flags": [
+      {
+        "check": "PARTIAL_SETTLEMENT",
+        "security_id": "XEF.TO",
+        "detail": "Position updated for XEF.TO but cash debit not cleared. Settlement status PENDING with negative pending cash of $1,999.49. Position exists in account confirming trade executed. Three-way inconsistency detected.",
+        "magnitude": 1999.49
+      }
+    ],
+    "total_market_value": 10522.57,
+    "anomaly_pattern": "PARTIAL_SETTLEMENT"
+  },
+  {
+    "account_id": "WS00463",
+    "account_type": "Personal",
+    "flags": [
+      {
+        "check": "FRACTIONAL_ROUNDING",
+        "security_id": "VFV.TO",
+        "detail": "OMS records 57.7631 units of VFV.TO but position system records 57.76 units. Discrepancy of 0.0031 units = $0.3668 at current NAV of $118.33.",
+        "magnitude": 0.3668
+      }
+    ],
+    "total_market_value": 33208.62,
+    "anomaly_pattern": "FRACTIONAL_ROUNDING"
+  },
+  {
+    "account_id": "WS00474",
+    "account_type": "TFSA",
+    "flags": [
+      {
+        "check": "NOVEL_TFSA_TRACKER_LAG",
+        "security_id": "TFSA_CONTRIBUTION_TRACKER",
+        "detail": "Deposit of $740.52 processed to cash balance but contribution room tracker not updated. Cross-system desync between core banking and contribution tracker microservice. True room remaining is $4,473.72 but tracker shows $5,214.24. Next deposit will be based on incorrect room data.",
+        "magnitude": 740.52
+      }
+    ],
+    "total_market_value": 14249.49,
+    "anomaly_pattern": "NOVEL_TFSA_TRACKER_LAG"
+  },
+  {
+    "account_id": "WS00483",
+    "account_type": "RRSP",
+    "flags": [
+      {
+        "check": "PARTIAL_SETTLEMENT",
+        "security_id": "XEF.TO",
+        "detail": "Position updated for XEF.TO but cash debit not cleared. Settlement status PENDING with negative pending cash of $3,568.01. Position exists in account confirming trade executed. Three-way inconsistency detected.",
+        "magnitude": 3568.01
+      }
+    ],
+    "total_market_value": 13046.33,
+    "anomaly_pattern": "PARTIAL_SETTLEMENT"
+  },
+  {
+    "account_id": "WS00489",
+    "account_type": "TFSA",
+    "flags": [
+      {
+        "check": "PARTIAL_SETTLEMENT",
+        "security_id": "XEF.TO",
+        "detail": "Position updated for XEF.TO but cash debit not cleared. Settlement status PENDING with negative pending cash of $10,870.88. Position exists in account confirming trade executed. Three-way inconsistency detected.",
+        "magnitude": 10870.88
+      }
+    ],
+    "total_market_value": 22397.37,
+    "anomaly_pattern": "PARTIAL_SETTLEMENT"
+  },
+  {
+    "account_id": "WS00499",
+    "account_type": "TFSA",
+    "flags": [
+      {
+        "check": "PARTIAL_SETTLEMENT",
+        "security_id": "XEF.TO",
+        "detail": "Position updated for XEF.TO but cash debit not cleared. Settlement status PENDING with negative pending cash of $3,197.48. Position exists in account confirming trade executed. Three-way inconsistency detected.",
+        "magnitude": 3197.48
+      }
+    ],
+    "total_market_value": 10794.62,
+    "anomaly_pattern": "PARTIAL_SETTLEMENT"
+  }
+]

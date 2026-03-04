@@ -1,0 +1,10 @@
+timestamp,incident_id,check_type,ai_severity,accounts_affected,operator_decision,operator_notes
+2026-02-28T21:59:15.260409,INC-NOVE-011,NOVEL_TFSA_TRACKER_LAG,HIGH,11,ESCALATE,Freezing TFSA deposits pending Platform Engineering review
+2026-03-01T17:27:23.746400,INC-NOVE-011,NOVEL_TFSA_TRACKER_LAG,HIGH,11,ESCALATE,Freezing TFSA deposits pending Platform Engineering review
+2026-03-01T20:16:58.763889,INC-NOVE-011,NOVEL_TFSA_TRACKER_LAG,HIGH,11,ESCALATE,Pending platform engineering review
+2026-03-01T20:43:02.455417,INC-NOVE-011,NOVEL_TFSA_TRACKER_LAG,HIGH,11,ESCALATE,Freezing TFSA deposits pending engineering review
+2026-03-01T20:55:20.283217,INC-NOVE-011,NOVEL_TFSA_TRACKER_LAG,HIGH,11,ESCALATE,Freezing TFSA  pending engineering review
+2026-03-01T21:27:53.257351,INC-NOVE-011,NOVEL_TFSA_TRACKER_LAG,HIGH,11,ESCALATE,Freezing TFSA deposits pending Platform Engineering review
+2026-03-01T21:36:21.313807,INC-NOVE-011,NOVEL_TFSA_TRACKER_LAG,HIGH,11,ESCALATE,Freezing TFSA deposits pending Platform Engineering review
+2026-03-01T21:54:52.296602,INC-NOVE-011,NOVEL_TFSA_TRACKER_LAG,HIGH,11,ESCALATE,"Freezing TFSA deposits pending Platform Engineering review"", "
+2026-03-01T22:06:30.096752,INC-NOVE-011,NOVEL_TFSA_TRACKER_LAG,HIGH,11,ESCALATE,Freezing TFSA deposits pending Platform Engineering review

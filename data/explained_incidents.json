@@ -1,0 +1,252 @@
+[
+  {
+    "incident_id": "INC-NOVE-011",
+    "check_type": "NOVEL_TFSA_TRACKER_LAG",
+    "incident_name": "NOVEL: TFSA Contribution Room Tracker Desync \u2014 Regulatory Risk",
+    "description": "TFSA accounts where a deposit was successfully processed to the cash balance but the contribution room tracker microservice was not updated. Root cause: message queue failure prevented the deposit event from reaching the tracker. The tracker still shows pre-deposit room as available. If the client makes another deposit believing they have full room remaining, they will over-contribute and trigger a CRA 1% monthly penalty tax on the excess amount. This failure requires cross-referencing three separate data sources simultaneously \u2014 transaction log, cash balance, and contribution tracker \u2014 which no single-field validation rule is designed to do. Novel pattern: does not match any known historical failure mode.",
+    "affected_security_context": "TFSA contribution tracker microservice \u2014 message queue failure",
+    "accounts_affected": 11,
+    "account_ids": [
+      "WS00010",
+      "WS00025",
+      "WS00107",
+      "WS00177",
+      "WS00223",
+      "WS00270",
+      "WS00322",
+      "WS00331",
+      "WS00351",
+      "WS00407",
+      "WS00474"
+    ],
+    "account_types_breakdown": {
+      "TFSA": 11,
+      "RRSP": 0,
+      "Personal": 0
+    },
+    "total_portfolio_exposure": 188158.13,
+    "average_magnitude": 1311.86,
+    "sample_flag_detail": "Deposit of $1,315.43 processed to cash balance but contribution room tracker not updated. Cross-system desync between core banking and contribution tracker microservice. True room remaining is $1,891.61 but tracker shows $3,207.04. Next deposit will be based on incorrect room data.",
+    "is_novel": true,
+    "severity": "HIGH",
+    "ai_explanation": {
+      "severity": "HIGH",
+      "severity_rationale": "Cross-system desync between transaction processing and TFSA contribution tracker creates direct CRA over-contribution penalty exposure for 11 clients, with no self-correcting mechanism and active risk of compounding harm on next client deposit.",
+      "root_cause_hypotheses": [
+        {
+          "rank": 1,
+          "hypothesis": "Message queue failure (e.g., broker crash, partition loss, or dead-letter overflow) between the core banking deposit event producer and the TFSA contribution tracker consumer, causing deposit events to be acknowledged upstream but never delivered or consumed downstream.",
+          "confidence": "HIGH",
+          "reasoning": "The incident description explicitly identifies a message queue failure as the root cause, and the pattern \u2014 successful cash balance credit with no corresponding tracker update \u2014 is consistent with an async event delivery failure where the deposit write path and the contribution tracking path are decoupled via a message bus."
+        },
+        {
+          "rank": 2,
+          "hypothesis": "TFSA contribution tracker microservice experienced a transient failure (OOM, pod crash, deployment rollout) during which it was unable to consume messages, and the message queue lacked sufficient retry/replay or dead-letter reprocessing to recover the lost events.",
+          "confidence": "MEDIUM",
+          "reasoning": "If the queue itself was healthy but the consumer was down without proper offset management or durable subscription, processed-but-unacknowledged messages could be lost or skipped on restart, producing the same desync pattern across a small cluster of temporally correlated deposits."
+        }
+      ],
+      "recommended_first_action": "Immediately freeze TFSA deposit acceptance for the 11 affected accounts by flagging them in the deposit gateway, then notify the Platform Engineering / Message Infrastructure team and the TFSA Tracker service team to inspect the message queue (dead-letter queue, consumer lag metrics, unacknowledged offsets) and manually reconcile contribution room by cross-referencing the core banking transaction log against the tracker state for each affected account.",
+      "estimated_resolution_path": "1) Freeze new TFSA deposits for affected accounts to prevent over-contributions. 2) Platform Engineering triages message queue health \u2014 inspect DLQ, consumer group lag, broker logs. 3) Extract all deposit events from core banking transaction log for the 11 accounts and replay or manually patch them into the contribution tracker. 4) Validate reconciled tracker values against CRA annual room limits. 5) Restore message queue consumer health and confirm end-to-end event flow with synthetic test deposits. 6) Unfreeze accounts and notify affected clients of corrected contribution room. 7) Implement cross-system reconciliation job (transaction log vs. tracker) as a scheduled integrity check to detect future desyncs proactively.",
+      "pattern_classification": "NOVEL",
+      "pattern_note": "This is a novel cross-system desync pattern requiring simultaneous correlation of transaction log, cash balance, and contribution tracker \u2014 no single-field validation or known historical failure mode covers this multi-source reconciliation gap.",
+      "requires_immediate_escalation": true,
+      "user_impact_if_unresolved": "Affected clients will see inflated TFSA contribution room in their dashboard, and any subsequent deposit made before market open or during the next business day will silently over-contribute, triggering CRA's 1% monthly penalty tax on the excess amount \u2014 a direct financial harm to the client with regulatory reporting implications for Wealthsimple."
+    }
+  },
+  {
+    "incident_id": "INC-PART-021",
+    "check_type": "PARTIAL_SETTLEMENT",
+    "incident_name": "Partial Settlement \u2014 Position Updated, Cash Not Cleared",
+    "description": "Accounts where position records updated following a trade but the corresponding cash debit has not cleared. The trade executed and the position is live in the account, but the cash that should have left the account is still showing as available. Likely cause: custody feed updated positions faster than cash settlement confirmation arrived. Common during high-volume market open periods when batch processing creates timing gaps between subsystems.",
+    "affected_security_context": "XEF.TO (iShares MSCI EAFE ETF) \u2014 RBC Custody",
+    "accounts_affected": 21,
+    "account_ids": [
+      "WS00027",
+      "WS00095",
+      "WS00113",
+      "WS00137",
+      "WS00146",
+      "WS00178",
+      "WS00211",
+      "WS00219",
+      "WS00230",
+      "WS00272",
+      "WS00311",
+      "WS00315",
+      "WS00320",
+      "WS00345",
+      "WS00358",
+      "WS00426",
+      "WS00440",
+      "WS00450",
+      "WS00483",
+      "WS00489",
+      "WS00499"
+    ],
+    "account_types_breakdown": {
+      "TFSA": 11,
+      "RRSP": 5,
+      "Personal": 5
+    },
+    "total_portfolio_exposure": 416623.35,
+    "average_magnitude": 7631.95,
+    "sample_flag_detail": "Position updated for XEF.TO but cash debit not cleared. Settlement status PENDING with negative pending cash of $14,094.14. Position exists in account confirming trade executed. Three-way inconsistency detected.",
+    "is_novel": false,
+    "severity": "HIGH",
+    "ai_explanation": {
+      "severity": "HIGH",
+      "severity_rationale": "21 accounts have live positions without corresponding cash debits cleared, creating phantom buying power that could enable unintended over-trading, with 11 TFSA accounts at direct CRA over-contribution risk and 5 RRSP accounts with retirement savings integrity exposure.",
+      "root_cause_hypotheses": [
+        {
+          "rank": 1,
+          "hypothesis": "RBC Custody position feed processed and committed XEF.TO position updates ahead of the corresponding cash settlement feed during high-volume market open batch processing, creating a timing desync between the position and cash subsystems.",
+          "confidence": "HIGH",
+          "reasoning": "This matches the known partial settlement pattern where custody feeds bifurcate position and cash confirmations; high-volume open periods routinely cause batch lag on the cash side while position updates stream in near-real-time, and RBC Custody's feed architecture is known to prioritize position state over cash state during peak load."
+        },
+        {
+          "rank": 2,
+          "hypothesis": "Cash settlement confirmation messages from RBC Custody were received but failed to parse or commit due to a schema mismatch, queue backlog, or transient ingestion error in the cash reconciliation pipeline.",
+          "confidence": "MEDIUM",
+          "reasoning": "A pure timing gap would typically self-resolve within the settlement batch window; the fact that 21 accounts remain in PENDING state with three-way inconsistency suggests the cash confirmations may have been dropped, dead-lettered, or rejected downstream rather than simply delayed."
+        }
+      ],
+      "recommended_first_action": "Operations Engineering and the Custody Reconciliation team must immediately query the RBC Custody cash settlement feed queue and dead-letter queue for the 21 affected account trade confirmations, confirm whether cash debit messages were sent by RBC but not ingested, and if missing, manually trigger a cash feed re-pull for the affected XEF.TO trades.",
+      "estimated_resolution_path": "1) Confirm cash settlement message status in RBC feed pipeline and DLQ; 2) If messages exist but failed ingestion, replay them through the cash reconciliation processor; 3) If messages were never sent by RBC, escalate to RBC Custody operations for expedited cash confirmation; 4) Once cash debits clear, run three-way reconciliation across all 21 accounts to confirm position-cash-settlement consistency; 5) Flag the 11 TFSA accounts for available-balance freeze to prevent any further purchases until cash clears, preventing CRA over-contribution; 6) Flag the 5 RRSP accounts similarly; 7) Produce post-incident audit trail for compliance.",
+      "pattern_classification": "KNOWN",
+      "pattern_note": "This is a recognized partial settlement timing gap between RBC Custody position and cash feeds during high-volume batch windows, with existing resolution protocols, but the TFSA/RRSP regulatory exposure elevates urgency beyond standard handling.",
+      "requires_immediate_escalation": true,
+      "user_impact_if_unresolved": "Affected clients see inflated available cash balances reflecting funds that should have been debited, potentially enabling additional purchases that exceed actual account value; TFSA holders risk inadvertent over-contributions triggering CRA penalty tax of 1% per month on excess amounts; RRSP holders risk contribution integrity violations; and if markets move adversely before correction, clients could face unexpected margin-like exposure or forced liquidations when the cash debit finally settles."
+    }
+  },
+  {
+    "incident_id": "INC-STAL-030",
+    "check_type": "STALE_PRICING",
+    "incident_name": "Stale Pricing \u2014 Holdings Valued at Prior NAV",
+    "description": "Accounts where position market value was calculated using yesterday's NAV despite updated pricing being available today. The pricing feed from the data vendor did not propagate to the position valuation engine on time. Every account holding this security is affected simultaneously because the failure is at the feed level, not the account level. Client portfolio balances, performance reporting, and any rebalancing logic reading these values is working with incorrect data.",
+    "affected_security_context": "XEQT.TO (iShares Core Equity ETF) \u2014 pricing feed lag",
+    "accounts_affected": 30,
+    "account_ids": [
+      "WS00013",
+      "WS00017",
+      "WS00034",
+      "WS00044",
+      "WS00070",
+      "WS00071",
+      "WS00084",
+      "WS00104",
+      "WS00105",
+      "WS00110",
+      "WS00141",
+      "WS00155",
+      "WS00159",
+      "WS00164",
+      "WS00175",
+      "WS00212",
+      "WS00218",
+      "WS00238",
+      "WS00247",
+      "WS00257",
+      "WS00277",
+      "WS00306",
+      "WS00318",
+      "WS00361",
+      "WS00364",
+      "WS00373",
+      "WS00384",
+      "WS00396",
+      "WS00421",
+      "WS00444"
+    ],
+    "account_types_breakdown": {
+      "TFSA": 11,
+      "RRSP": 6,
+      "Personal": 13
+    },
+    "total_portfolio_exposure": 569274.67,
+    "average_magnitude": 695.49,
+    "sample_flag_detail": "XEQT.TO position valued at yesterday NAV of $29.22 while current NAV is $29.55 \u2014 a 1.13% drift. Position market value understated by $33.39.",
+    "is_novel": false,
+    "severity": "MEDIUM",
+    "ai_explanation": {
+      "severity": "MEDIUM",
+      "severity_rationale": "Stale pricing affects 30 accounts with a 1.13% NAV drift ($33.39 average understatement) across $569K exposure; while not catastrophic in magnitude, TFSA/RRSP regulatory implications and potential for incorrect rebalancing trades elevate this above LOW.",
+      "root_cause_hypotheses": [
+        {
+          "rank": 1,
+          "hypothesis": "XEQT.TO pricing feed from the market data vendor failed to propagate to the position valuation engine due to a feed ingestion lag or failed polling cycle in the pricing pipeline.",
+          "confidence": "HIGH",
+          "reasoning": "The incident description explicitly states the vendor feed did not propagate on time, all 30 accounts holding XEQT.TO are uniformly affected, and the stale value exactly matches yesterday's closing NAV \u2014 consistent with a missed or delayed feed update rather than a calculation or account-level error."
+        },
+        {
+          "rank": 2,
+          "hypothesis": "The position valuation engine's cache or fallback logic served the last-known-good NAV after a timeout, masking an upstream vendor delivery failure or API error.",
+          "confidence": "MEDIUM",
+          "reasoning": "Many pricing engines implement a staleness fallback that silently serves the prior day's price when a fresh quote is unavailable within a configured window; this would explain why no hard error was raised and the stale price was consumed as if valid."
+        }
+      ],
+      "recommended_first_action": "Notify the Market Data / Pricing Operations team to force a manual re-pull of the XEQT.TO NAV from the vendor feed and trigger an immediate revaluation of all 30 affected positions in the valuation engine.",
+      "estimated_resolution_path": "1) Pricing Ops forces fresh XEQT.TO NAV ingestion and confirms current price ($29.55) propagates to valuation engine. 2) Batch revaluation job is triggered for all 30 affected accounts to recalculate market values, portfolio balances, and performance figures. 3) Verify no rebalancing or automated trade orders were executed against stale values; reverse or flag any that were. 4) Validate TFSA and RRSP account balances to ensure no CRA over-contribution thresholds were breached due to understated values. 5) Engineering investigates feed polling/caching mechanism to add staleness alerting and prevent silent fallback.",
+      "pattern_classification": "KNOWN",
+      "pattern_note": "This is a recognized stale-pricing feed-lag pattern with existing resolution protocols for vendor feed re-ingestion and batch revaluation.",
+      "requires_immediate_escalation": true,
+      "user_impact_if_unresolved": "Clients see understated portfolio balances and incorrect daily performance in their dashboards; any automated rebalancing or contribution-room calculations operate on stale data, risking erroneous trades and potential TFSA/RRSP over-contribution reporting to CRA if contribution room appears artificially available."
+    }
+  },
+  {
+    "incident_id": "INC-FRAC-012",
+    "check_type": "FRACTIONAL_ROUNDING",
+    "incident_name": "Fractional Share Rounding \u2014 OMS vs Position System Discrepancy",
+    "description": "Accounts where the unit count recorded by the order management system differs from the unit count recorded by the position system. Root cause is a decimal precision mismatch at the boundary between systems \u2014 OMS stores fractional units to 4 decimal places while the position system truncates to 2. Each individual discrepancy is small but at scale across all accounts holding this security the aggregate unreconciled position value becomes material. Unique to Wealthsimple's fractional share model \u2014 traditional whole-share brokerages do not face this failure mode.",
+    "affected_security_context": "VFV.TO (Vanguard S&P 500 ETF) \u2014 OMS/position system boundary",
+    "accounts_affected": 12,
+    "account_ids": [
+      "WS00041",
+      "WS00065",
+      "WS00077",
+      "WS00090",
+      "WS00144",
+      "WS00209",
+      "WS00280",
+      "WS00300",
+      "WS00330",
+      "WS00369",
+      "WS00380",
+      "WS00463"
+    ],
+    "account_types_breakdown": {
+      "TFSA": 2,
+      "RRSP": 7,
+      "Personal": 3
+    },
+    "total_portfolio_exposure": 275708.58,
+    "average_magnitude": 0.41,
+    "sample_flag_detail": "OMS records 3.8526 units of VFV.TO but position system records 3.85 units. Discrepancy of 0.0026 units = $0.3077 at current NAV of $118.33.",
+    "is_novel": false,
+    "severity": "MEDIUM",
+    "ai_explanation": {
+      "severity": "MEDIUM",
+      "severity_rationale": "Individual discrepancies are sub-dollar ($0.31 avg) and non-systemic in nature, but aggregate unreconciled position value across 12 accounts is material for audit purposes, and the TFSA/RRSP regulatory exposure elevates this above LOW.",
+      "root_cause_hypotheses": [
+        {
+          "rank": 1,
+          "hypothesis": "Decimal precision mismatch at the OMS-to-position-system boundary: OMS persists fractional units at 4 decimal places while the position system truncates (not rounds) to 2 decimal places on ingestion, silently dropping residual fractional units.",
+          "confidence": "HIGH",
+          "reasoning": "The sample anomaly (3.8526 \u2192 3.85, loss of 0.0026 units) is perfectly consistent with a truncation-at-2-decimals behavior rather than rounding, and the issue is isolated to the inter-system handoff for a single security (VFV.TO) that is heavily held in fractional form across Wealthsimple's retail base."
+        },
+        {
+          "rank": 2,
+          "hypothesis": "Schema or serialization change in the position system's ingestion pipeline that inadvertently reduced the decimal precision column or protobuf field definition from DECIMAL(12,4) to DECIMAL(12,2) during a recent migration or deploy.",
+          "confidence": "MEDIUM",
+          "reasoning": "If this were a long-standing design gap it would likely have been caught earlier at reconciliation; a recent schema or config change could explain why the discrepancy surfaced now across exactly 12 accounts rather than the full population of VFV.TO holders."
+        }
+      ],
+      "recommended_first_action": "Engage the Core Ledger / Position Reconciliation team to run a full cross-system reconciliation query across ALL VFV.TO holders (not just the flagged 12) comparing OMS unit counts at 4dp against position system unit counts, to determine true blast radius before any corrections are applied.",
+      "estimated_resolution_path": "1) Quantify full scope via reconciliation query across all VFV.TO accounts and other fractional-eligible securities. 2) Apply a position system schema fix to accept 4+ decimal places, matching OMS precision. 3) Run a one-time correction job to re-sync position records to OMS source-of-truth values for all affected accounts. 4) For the 2 TFSA accounts, calculate whether corrected unit values change the fair market value to a level that triggers CRA over-contribution thresholds and file amended contribution reports if needed. 5) For the 7 RRSP accounts, confirm corrected book cost and unit counts align so no retirement savings integrity issue persists. 6) Add an automated reconciliation check at the OMS/position boundary to catch future precision mismatches before end-of-day.",
+      "pattern_classification": "KNOWN",
+      "pattern_note": "This is a recognized fractional-share decimal truncation discrepancy at the OMS/position system boundary, unique to platforms supporting sub-unit trading, with existing resolution protocols.",
+      "requires_immediate_escalation": false,
+      "user_impact_if_unresolved": "Clients see slightly understated holdings in their portfolio view (e.g., 3.85 instead of 3.8526 units of VFV.TO), leading to minor but visible cost-basis and performance-tracking errors; more critically, TFSA and RRSP account holders could face incorrect tax reporting or contribution-room calculations submitted to the CRA, risking penalties or compliance letters."
+    }
+  }
+]

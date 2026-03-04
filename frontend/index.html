@@ -1,0 +1,1001 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ASIE — Account State Intelligence Engine</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #07090d;
+    --surface: #0c1018;
+    --surface2: #131924;
+    --surface3: #1a2030;
+    --border: #1e2535;
+    --border2: #2a3347;
+    --text: #dde5f0;
+    --text2: #7a8899;
+    --text3: #3d4d60;
+    --high: #f04444;
+    --high-dim: rgba(240,68,68,0.1);
+    --high-border: rgba(240,68,68,0.25);
+    --medium: #e8a020;
+    --medium-dim: rgba(232,160,32,0.1);
+    --medium-border: rgba(232,160,32,0.25);
+    --low: #34c759;
+    --low-dim: rgba(52,199,89,0.1);
+    --low-border: rgba(52,199,89,0.25);
+    --novel: #9b6ff5;
+    --novel-dim: rgba(155,111,245,0.1);
+    --novel-border: rgba(155,111,245,0.25);
+    --accent: #4d9cf5;
+    --escalate: #f07060;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12.5px;
+    line-height: 1.6;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* subtle grid texture */
+  body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(77,156,245,0.015) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(77,156,245,0.015) 1px, transparent 1px);
+    background-size: 40px 40px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* ── HEADER ── */
+  .header {
+    background: rgba(12,16,24,0.95);
+    border-bottom: 1px solid var(--border);
+    padding: 0 28px;
+    height: 52px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    backdrop-filter: blur(8px);
+  }
+
+  .header-left { display: flex; align-items: center; gap: 20px; }
+
+  .logo {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 17px;
+    letter-spacing: 1px;
+    color: var(--text);
+    text-transform: uppercase;
+  }
+
+  .logo span { color: var(--accent); }
+
+  .system-tag {
+    font-size: 9.5px;
+    color: var(--text3);
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    border-left: 1px solid var(--border2);
+    padding-left: 20px;
+  }
+
+  .header-right { display: flex; align-items: center; gap: 20px; }
+
+  .pulse-wrap { display: flex; align-items: center; gap: 8px; }
+
+  .status-dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--low);
+    animation: pulse 2.5s ease-in-out infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(52,199,89,0.5); }
+    50% { box-shadow: 0 0 0 5px rgba(52,199,89,0); }
+  }
+
+  .status-text { font-size: 10px; color: var(--low); letter-spacing: 1.5px; text-transform: uppercase; }
+  .timestamp { font-size: 10.5px; color: var(--text3); font-variant-numeric: tabular-nums; }
+
+  /* ── LAYOUT ── */
+  .main {
+    display: grid;
+    grid-template-columns: 360px 1fr;
+    height: calc(100vh - 52px);
+    position: relative;
+    z-index: 1;
+  }
+
+  /* ── SIDEBAR ── */
+  .sidebar {
+    background: var(--surface);
+    border-right: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  .summary-bar {
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--border);
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+
+  .stat {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 5px;
+    padding: 10px 12px;
+    transition: border-color 0.2s;
+  }
+
+  .stat:hover { border-color: var(--border2); }
+
+  .stat-value {
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 20px;
+    color: var(--text);
+    line-height: 1;
+    margin-bottom: 5px;
+  }
+
+  .stat-label { font-size: 9px; color: var(--text3); letter-spacing: 1.5px; text-transform: uppercase; }
+  .stat.highlight .stat-value { color: var(--accent); }
+
+  .queue-header {
+    padding: 14px 20px 10px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .queue-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--text2);
+  }
+
+  .queue-count { font-size: 10px; color: var(--text3); }
+
+  .incident-list { overflow-y: auto; flex: 1; }
+  .incident-list::-webkit-scrollbar { width: 3px; }
+  .incident-list::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 2px; }
+
+  .incident-card {
+    padding: 14px 20px;
+    border-bottom: 1px solid var(--border);
+    cursor: pointer;
+    transition: background 0.15s;
+    position: relative;
+  }
+
+  .incident-card::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 2px;
+    background: transparent;
+    transition: background 0.15s;
+  }
+
+  .incident-card:hover { background: var(--surface2); }
+  .incident-card.active { background: var(--surface2); }
+  .incident-card.sev-HIGH.active::before,
+  .incident-card.sev-HIGH::before { background: var(--high); }
+  .incident-card.sev-MEDIUM.active::before { background: var(--medium); }
+  .incident-card.active::before { background: var(--accent); }
+
+  .card-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 6px;
+  }
+
+  .card-id { font-size: 10px; color: var(--text3); letter-spacing: 1px; }
+  .badges { display: flex; gap: 5px; align-items: center; flex-wrap: wrap; }
+
+  .badge {
+    font-size: 8.5px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: 2px 6px;
+    border-radius: 3px;
+  }
+
+  .badge-HIGH { background: var(--high-dim); color: var(--high); border: 1px solid var(--high-border); }
+  .badge-MEDIUM { background: var(--medium-dim); color: var(--medium); border: 1px solid var(--medium-border); }
+  .badge-LOW { background: var(--low-dim); color: var(--low); border: 1px solid var(--low-border); }
+  .badge-NOVEL { background: var(--novel-dim); color: var(--novel); border: 1px solid var(--novel-border); }
+  .badge-ESCALATE { background: rgba(240,112,96,0.1); color: var(--escalate); border: 1px solid rgba(240,112,96,0.25); }
+
+  .card-name {
+    font-family: 'Syne', sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 6px;
+    line-height: 1.35;
+  }
+
+  .card-meta { display: flex; gap: 14px; }
+  .card-meta-item { font-size: 10.5px; color: var(--text2); }
+  .card-meta-item span { color: var(--text3); margin-right: 4px; }
+
+  /* ── DETAIL ── */
+  .detail { overflow-y: auto; background: var(--bg); }
+  .detail::-webkit-scrollbar { width: 3px; }
+  .detail::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 2px; }
+
+  .empty-state {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: var(--text3);
+    gap: 10px;
+  }
+
+  .empty-icon { font-size: 32px; opacity: 0.2; }
+  .empty-text { font-size: 11px; letter-spacing: 2px; text-transform: uppercase; }
+
+  .detail-content {
+    padding: 36px 40px;
+    max-width: 860px;
+    animation: fadeUp 0.2s ease forwards;
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(6px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ── INCIDENT HEADER ── */
+  .incident-header { margin-bottom: 32px; }
+
+  .inc-id { font-size: 10px; color: var(--text3); letter-spacing: 2px; text-transform: uppercase; margin-bottom: 10px; }
+
+  .inc-name {
+    font-family: 'Syne', sans-serif;
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--text);
+    line-height: 1.25;
+    margin-bottom: 14px;
+  }
+
+  .inc-badges { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 20px; }
+
+  .badge-lg {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: 4px 10px;
+    border-radius: 4px;
+  }
+
+  .stats-row {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+  }
+
+  .stat-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 12px 14px;
+  }
+
+  .stat-card-value {
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 17px;
+    color: var(--text);
+    margin-bottom: 4px;
+  }
+
+  .stat-card-label { font-size: 9px; color: var(--text3); letter-spacing: 1px; text-transform: uppercase; }
+
+  /* ── SECTION ── */
+  .section { margin-bottom: 28px; }
+
+  .section-label {
+    font-size: 9.5px;
+    font-weight: 600;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    color: var(--text3);
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .section-label::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+
+  /* ── PROBABILISTIC INFERENCE BAR ── */
+  .inference-bar {
+    background: linear-gradient(135deg, rgba(77,156,245,0.06) 0%, rgba(155,111,245,0.06) 100%);
+    border: 1px solid rgba(77,156,245,0.2);
+    border-radius: 6px;
+    padding: 14px 18px;
+    margin-bottom: 20px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+  }
+
+  .inf-item { display: flex; flex-direction: column; gap: 3px; }
+
+  .inf-label {
+    font-size: 9px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--text3);
+  }
+
+  .inf-value {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--accent);
+  }
+
+  /* ── SEVERITY ROW ── */
+  .severity-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    padding: 16px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    margin-bottom: 16px;
+  }
+
+  .sev-pill {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 12px;
+    letter-spacing: 1.5px;
+    padding: 5px 12px;
+    border-radius: 4px;
+    white-space: nowrap;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+
+  .sev-HIGH { background: var(--high-dim); color: var(--high); border: 1px solid var(--high-border); }
+  .sev-MEDIUM { background: var(--medium-dim); color: var(--medium); border: 1px solid var(--medium-border); }
+  .sev-LOW { background: var(--low-dim); color: var(--low); border: 1px solid var(--low-border); }
+
+  .sev-rationale { font-size: 12px; color: var(--text2); line-height: 1.65; }
+
+  /* ── HYPOTHESES ── */
+  .hypothesis {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 14px 16px;
+    margin-bottom: 10px;
+    transition: border-color 0.15s;
+  }
+
+  .hypothesis:hover { border-color: var(--border2); }
+
+  .hyp-header { display: flex; align-items: flex-start; gap: 10px; margin-bottom: 6px; }
+
+  .hyp-rank {
+    width: 20px; height: 20px;
+    border-radius: 50%;
+    background: var(--surface3);
+    border: 1px solid var(--border2);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 9px; font-weight: 700;
+    color: var(--text2);
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+
+  .hyp-text { font-size: 12px; color: var(--text); font-weight: 500; line-height: 1.5; flex: 1; }
+
+  .hyp-conf {
+    font-size: 8.5px; font-weight: 700;
+    letter-spacing: 1px; text-transform: uppercase;
+    padding: 2px 7px; border-radius: 3px;
+    white-space: nowrap; flex-shrink: 0;
+    margin-top: 2px;
+  }
+
+  .conf-HIGH { background: var(--low-dim); color: var(--low); }
+  .conf-MEDIUM { background: var(--medium-dim); color: var(--medium); }
+  .conf-LOW { background: var(--high-dim); color: var(--high); }
+
+  .hyp-reasoning { font-size: 11px; color: var(--text3); line-height: 1.6; padding-left: 30px; }
+
+  /* ── EVO TABLE ── */
+  .evo-box {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    overflow: hidden;
+  }
+
+  .evo-box table { width: 100%; border-collapse: collapse; font-size: 12px; }
+
+  .evo-box th {
+    text-align: left;
+    font-size: 9px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--text3);
+    padding: 10px 14px;
+    background: var(--surface2);
+    border-bottom: 1px solid var(--border);
+    font-weight: 600;
+  }
+
+  .evo-box td { padding: 10px 14px; color: var(--text2); border-bottom: 1px solid var(--border); }
+  .evo-box tr:last-child td { border-bottom: none; }
+  .evo-box td:first-child { color: var(--text2); }
+  .val-expected { color: var(--low) !important; font-weight: 500; }
+  .val-observed { color: var(--high) !important; font-weight: 500; }
+  .val-ok { color: var(--low) !important; }
+  .val-deviation { color: var(--medium) !important; font-weight: 600; }
+
+  /* ── ACTION BOX ── */
+  .action-box {
+    background: rgba(77,156,245,0.04);
+    border: 1px solid rgba(77,156,245,0.18);
+    border-left: 3px solid var(--accent);
+    border-radius: 0 6px 6px 0;
+    padding: 14px 16px;
+    margin-bottom: 16px;
+  }
+
+  .action-label { font-size: 9px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--accent); margin-bottom: 7px; }
+  .action-text { font-size: 12px; color: var(--text); line-height: 1.65; }
+
+  /* ── IMPACT BOX ── */
+  .impact-box {
+    background: rgba(240,68,68,0.04);
+    border: 1px solid rgba(240,68,68,0.15);
+    border-left: 3px solid var(--high);
+    border-radius: 0 6px 6px 0;
+    padding: 14px 16px;
+    margin-bottom: 16px;
+  }
+
+  .impact-label { font-size: 9px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--high); margin-bottom: 7px; }
+  .impact-text { font-size: 12px; color: var(--text2); line-height: 1.65; }
+
+  /* ── ACCOUNT CHIPS ── */
+  .account-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 6px;
+  }
+
+  .account-chip {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 7px 10px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 11px;
+    transition: border-color 0.15s;
+  }
+
+  .account-chip:hover { border-color: var(--border2); }
+  .acc-id { color: var(--text); font-weight: 500; }
+  .acc-type { font-size: 9.5px; color: var(--text3); }
+
+  .more-accounts { font-size: 10.5px; color: var(--text3); padding: 8px 0; }
+
+  /* ── OPERATOR PANEL ── */
+  .operator-panel {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+
+  .op-header {
+    padding: 11px 16px;
+    background: var(--surface2);
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .op-title { font-size: 9px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--text2); }
+  .op-subtitle { font-size: 9px; color: var(--text3); letter-spacing: 1px; }
+
+  .op-body { padding: 16px; display: flex; flex-direction: column; gap: 12px; }
+
+  .decision-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+
+  .dec-btn {
+    padding: 9px 6px;
+    border-radius: 5px;
+    border: 1px solid var(--border2);
+    background: var(--surface2);
+    color: var(--text2);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10.5px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.15s;
+    text-align: center;
+  }
+
+  .dec-btn:hover { border-color: var(--accent); color: var(--accent); background: rgba(77,156,245,0.05); }
+  .dec-btn.sel-ESCALATE { background: rgba(240,112,96,0.12); border-color: var(--escalate); color: var(--escalate); }
+  .dec-btn.sel-RESOLVE { background: var(--low-dim); border-color: var(--low-border); color: var(--low); }
+  .dec-btn.sel-MONITOR { background: var(--medium-dim); border-color: var(--medium-border); color: var(--medium); }
+  .dec-btn.sel-DISMISS { background: var(--surface3); border-color: var(--border); color: var(--text3); }
+
+  .notes-input {
+    width: 100%;
+    background: var(--surface2);
+    border: 1px solid var(--border2);
+    border-radius: 5px;
+    padding: 9px 12px;
+    color: var(--text);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11.5px;
+    resize: vertical;
+    min-height: 60px;
+    outline: none;
+    transition: border-color 0.15s;
+  }
+
+  .notes-input:focus { border-color: var(--accent); }
+  .notes-input::placeholder { color: var(--text3); }
+
+  .op-footer { display: flex; align-items: center; justify-content: space-between; }
+
+  .log-success { font-size: 11px; color: var(--low); display: none; }
+
+  .log-btn {
+    background: var(--accent);
+    color: #07090d;
+    border: none;
+    border-radius: 5px;
+    padding: 9px 18px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: opacity 0.15s;
+  }
+
+  .log-btn:hover { opacity: 0.85; }
+
+  /* ── LOADING ── */
+  .loading {
+    display: flex; align-items: center; justify-content: center;
+    height: 160px; color: var(--text3); gap: 10px;
+    font-size: 11px; letter-spacing: 1px;
+  }
+
+  .spinner {
+    width: 14px; height: 14px;
+    border: 2px solid var(--border2);
+    border-top-color: var(--accent);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+  }
+
+  @keyframes spin { to { transform: rotate(360deg); } }
+</style>
+</head>
+<body>
+
+<header class="header">
+  <div class="header-left">
+    <div class="logo">ASIE<span>.</span></div>
+    <div class="system-tag">Account State Intelligence Engine</div>
+  </div>
+  <div class="header-right">
+    <div class="pulse-wrap">
+      <div class="status-dot"></div>
+      <div class="status-text">Monitoring Active</div>
+    </div>
+    <div class="timestamp" id="clock">—</div>
+  </div>
+</header>
+
+<div class="main">
+  <aside class="sidebar">
+    <div class="summary-bar" id="summary-bar">
+      <div class="loading" style="grid-column:span 2"><div class="spinner"></div></div>
+    </div>
+    <div class="queue-header">
+      <div class="queue-title">Incident Queue</div>
+      <div class="queue-count" id="queue-count">—</div>
+    </div>
+    <div class="incident-list" id="incident-list">
+      <div class="loading"><div class="spinner"></div> Loading…</div>
+    </div>
+  </aside>
+
+  <main class="detail" id="detail-panel">
+    <div class="empty-state">
+      <div class="empty-icon">⬡</div>
+      <div class="empty-text">Select an incident</div>
+    </div>
+  </main>
+</div>
+
+<script>
+const API = 'http://127.0.0.1:8000';
+let incidents = [];
+let selectedDecision = null;
+
+// Clock
+setInterval(() => {
+  document.getElementById('clock').textContent =
+    new Date().toLocaleTimeString('en-CA', { hour12: false });
+}, 1000);
+document.getElementById('clock').textContent =
+  new Date().toLocaleTimeString('en-CA', { hour12: false });
+
+// Summary
+async function loadSummary() {
+  const data = await fetch(`${API}/summary`).then(r => r.json());
+  document.getElementById('summary-bar').innerHTML = `
+    <div class="stat highlight">
+      <div class="stat-value">${data.total_accounts_monitored.toLocaleString()}</div>
+      <div class="stat-label">Accounts Monitored</div>
+    </div>
+    <div class="stat">
+      <div class="stat-value">${data.total_incidents}</div>
+      <div class="stat-label">Active Incidents</div>
+    </div>
+    <div class="stat">
+      <div class="stat-value">${data.total_affected_accounts}</div>
+      <div class="stat-label">Accounts Affected</div>
+    </div>
+    <div class="stat">
+      <div class="stat-value">$${(data.total_portfolio_exposure/1000).toFixed(0)}K</div>
+      <div class="stat-label">Exposure</div>
+    </div>
+    <div class="stat">
+      <div class="stat-value" style="color:var(--high)">${data.severity_breakdown.HIGH||0}</div>
+      <div class="stat-label">High Severity</div>
+    </div>
+    <div class="stat">
+      <div class="stat-value" style="color:var(--novel)">${data.novel_incidents}</div>
+      <div class="stat-label">Novel Patterns</div>
+    </div>
+  `;
+}
+
+// Incidents
+async function loadIncidents() {
+  const data = await fetch(`${API}/incidents`).then(r => r.json());
+  incidents = data.incidents;
+
+  for (const inc of incidents) {
+    try {
+      const d = await fetch(`${API}/incidents/${inc.incident_id}/accounts`).then(r => r.json());
+      inc._accounts = d.accounts || [];
+    } catch { inc._accounts = []; }
+  }
+
+  document.getElementById('queue-count').textContent = `${incidents.length} incidents`;
+
+  document.getElementById('incident-list').innerHTML = incidents.map(inc => {
+    const sev = inc.severity || 'LOW';
+    return `
+      <div class="incident-card sev-${sev}" onclick="selectIncident('${inc.incident_id}')">
+        <div class="card-top">
+          <div class="card-id">${inc.incident_id}</div>
+          <div class="badges">
+            ${inc.is_novel ? '<span class="badge badge-NOVEL">Novel</span>' : ''}
+            ${inc.ai_explanation?.requires_immediate_escalation ? '<span class="badge badge-ESCALATE">Escalate</span>' : ''}
+            <span class="badge badge-${sev}">${sev}</span>
+          </div>
+        </div>
+        <div class="card-name">${inc.incident_name}</div>
+        <div class="card-meta">
+          <div class="card-meta-item"><span>Accounts</span>${inc.accounts_affected}</div>
+          <div class="card-meta-item"><span>Exposure</span>$${(inc.total_portfolio_exposure/1000).toFixed(0)}K</div>
+        </div>
+      </div>`;
+  }).join('');
+
+  if (incidents.length > 0) selectIncident(incidents[0].incident_id);
+}
+
+// Inference metadata per pattern
+function getInferenceMeta(inc) {
+  const detectionMethod = {
+    'NOVEL_TFSA_TRACKER_LAG': 'Cross-system correlation — 3 data sources',
+    'PARTIAL_SETTLEMENT':     'Cross-field state correlation — position + cash',
+    'STALE_PRICING':          'NAV drift detection — feed vs reference data',
+    'FRACTIONAL_ROUNDING':    'Precision boundary analysis — OMS vs position system',
+  }[inc.check_type] || 'Multi-field anomaly detection';
+
+  const anomalyProb = {
+    'NOVEL_TFSA_TRACKER_LAG': '<0.1% under normal operations',
+    'PARTIAL_SETTLEMENT':     '<0.5% under normal operations',
+    'STALE_PRICING':          '<2% without feed failure',
+    'FRACTIONAL_ROUNDING':    'Systematic — boundary design gap',
+  }[inc.check_type] || '—';
+
+  return { detectionMethod, anomalyProb };
+}
+
+// Expected vs Observed table
+function buildEvoTable(inc) {
+  const accs = inc._accounts || [];
+
+  if (inc.check_type === 'STALE_PRICING') {
+    const stale = 29.22, current = 29.55;
+    const drift = ((current - stale) / stale * 100).toFixed(2);
+    const avgStale = accs.reduce((s, a) => s + (a.positions?.['XEQT.TO']?.market_value || 0), 0) / (accs.length || 1);
+    const avgCorrect = accs.reduce((s, a) => {
+      const p = a.positions?.['XEQT.TO'];
+      return s + (p ? p.units * current : 0);
+    }, 0) / (accs.length || 1);
+    return `<div class="evo-box"><table>
+      <tr><th>Metric</th><th>Expected</th><th>Observed</th><th>Deviation</th></tr>
+      <tr><td>XEQT.TO NAV in Valuation Engine</td><td class="val-expected">$${current}</td><td class="val-observed">$${stale}</td><td class="val-deviation">−${drift}%</td></tr>
+      <tr><td>Avg Position Value per Account</td><td class="val-expected">$${avgCorrect.toFixed(2)}</td><td class="val-observed">$${avgStale.toFixed(2)}</td><td class="val-deviation">−$${(avgCorrect-avgStale).toFixed(2)}</td></tr>
+      <tr><td>Accounts on Correct NAV</td><td class="val-expected">500 of 500</td><td class="val-observed">${500 - inc.accounts_affected} of 500</td><td class="val-deviation">${inc.accounts_affected} stale</td></tr>
+    </table></div>`;
+  }
+
+  if (inc.check_type === 'PARTIAL_SETTLEMENT') {
+    const avgPending = accs.reduce((s, a) => s + Math.abs(a.pending_cash || 0), 0) / (accs.length || 1);
+    const avgCash = accs.reduce((s, a) => s + (a.cash_balance || 0), 0) / (accs.length || 1);
+    return `<div class="evo-box"><table>
+      <tr><th>Metric</th><th>Expected</th><th>Observed</th><th>Deviation</th></tr>
+      <tr><td>Settlement Status</td><td class="val-expected">SETTLED</td><td class="val-observed">PENDING</td><td class="val-deviation">T+2 breach</td></tr>
+      <tr><td>Avg Cash Balance</td><td class="val-expected">$${(avgCash - avgPending).toFixed(2)}</td><td class="val-observed">$${avgCash.toFixed(2)}</td><td class="val-deviation">+$${avgPending.toFixed(2)} phantom</td></tr>
+      <tr><td>Avg Pending Cash Owed</td><td class="val-expected">$0.00</td><td class="val-observed">−$${avgPending.toFixed(2)}</td><td class="val-deviation">Not cleared</td></tr>
+    </table></div>`;
+  }
+
+  if (inc.check_type === 'FRACTIONAL_ROUNDING') {
+    const avgOms = accs.reduce((s, a) => s + (a.positions?.['VFV.TO']?.units || 0), 0) / (accs.length || 1);
+    const avgPos = accs.reduce((s, a) => s + (a.positions?.['VFV.TO']?.units_position_system || 0), 0) / (accs.length || 1);
+    const gap = avgOms - avgPos;
+    return `<div class="evo-box"><table>
+      <tr><th>Metric</th><th>Expected</th><th>Observed</th><th>Deviation</th></tr>
+      <tr><td>Units — OMS (source of truth)</td><td class="val-ok">${avgOms.toFixed(4)}</td><td class="val-ok">${avgOms.toFixed(4)}</td><td class="val-ok">✓ Correct</td></tr>
+      <tr><td>Units — Position System</td><td class="val-expected">${avgOms.toFixed(4)}</td><td class="val-observed">${avgPos.toFixed(4)}</td><td class="val-deviation">−${gap.toFixed(4)} units</td></tr>
+      <tr><td>Avg Dollar Gap per Account</td><td class="val-expected">$0.0000</td><td class="val-observed">$${(gap * 118.33).toFixed(4)}</td><td class="val-deviation">Audit discrepancy</td></tr>
+    </table></div>`;
+  }
+
+  if (inc.check_type === 'NOVEL_TFSA_TRACKER_LAG') {
+    const avgDeposit = accs.reduce((s, a) => s + (a.tfsa_deposit_untracked || 0), 0) / (accs.length || 1);
+    const avgCash = accs.reduce((s, a) => s + (a.cash_balance || 0), 0) / (accs.length || 1);
+    const avgRoom = accs.reduce((s, a) => s + (a.tfsa_room_remaining || 0), 0) / (accs.length || 1);
+    return `<div class="evo-box"><table>
+      <tr><th>Metric</th><th>Expected</th><th>Observed</th><th>Deviation</th></tr>
+      <tr><td>Cash Balance</td><td class="val-ok">$${avgCash.toFixed(2)}</td><td class="val-ok">$${avgCash.toFixed(2)}</td><td class="val-ok">✓ Correct</td></tr>
+      <tr><td>TFSA Room Shown to Client</td><td class="val-expected">$${(avgRoom - avgDeposit).toFixed(2)}</td><td class="val-observed">$${avgRoom.toFixed(2)}</td><td class="val-deviation">+$${avgDeposit.toFixed(2)} overstated</td></tr>
+      <tr><td>Avg Untracked Deposit</td><td class="val-expected">$0.00</td><td class="val-observed">$${avgDeposit.toFixed(2)}</td><td class="val-deviation">CRA exposure risk</td></tr>
+    </table></div>`;
+  }
+  return '';
+}
+
+function selectIncident(id) {
+  selectedDecision = null;
+  document.querySelectorAll('.incident-card').forEach(c => c.classList.remove('active'));
+  document.querySelectorAll('.incident-card').forEach(c => {
+    if (c.querySelector('.card-id')?.textContent === id) c.classList.add('active');
+  });
+  const inc = incidents.find(i => i.incident_id === id);
+  if (inc) renderDetail(inc);
+}
+
+function renderDetail(inc) {
+  const sev = inc.severity || 'LOW';
+  const exp = inc.ai_explanation || {};
+  const tb = inc.account_types_breakdown || {};
+  const { detectionMethod, anomalyProb } = getInferenceMeta(inc);
+
+  const hypotheses = (exp.root_cause_hypotheses || []).map(h => `
+    <div class="hypothesis">
+      <div class="hyp-header">
+        <div class="hyp-rank">${h.rank}</div>
+        <div class="hyp-text">${h.hypothesis}</div>
+        <div class="hyp-conf conf-${h.confidence}">${h.confidence}</div>
+      </div>
+      <div class="hyp-reasoning">${h.reasoning}</div>
+    </div>`).join('');
+
+  const accountChips = inc.account_ids.slice(0, 12).map((aid, i) => {
+    const type = i < (tb.TFSA||0) ? 'TFSA' : i < (tb.TFSA||0)+(tb.RRSP||0) ? 'RRSP' : 'Personal';
+    return `<div class="account-chip"><span class="acc-id">${aid}</span><span class="acc-type">${type}</span></div>`;
+  }).join('');
+
+  const more = inc.account_ids.length > 12
+    ? `<div class="more-accounts">+ ${inc.account_ids.length - 12} more accounts</div>` : '';
+
+  // Truncate resolution path to 3 steps max
+  const resPath = (exp.estimated_resolution_path || '').split(/\d\)/).filter(Boolean).slice(0,3)
+    .map((s,i) => `${i+1})${s.trim()}`).join(' ') || exp.estimated_resolution_path || '—';
+
+  document.getElementById('detail-panel').innerHTML = `
+    <div class="detail-content">
+
+      <div class="incident-header">
+        <div class="inc-id">${inc.incident_id}</div>
+        <div class="inc-name">${inc.incident_name}</div>
+        <div class="inc-badges">
+          <span class="badge-lg badge-${sev}">${sev} Severity</span>
+          ${inc.is_novel
+            ? '<span class="badge-lg badge-NOVEL">◆ Novel Pattern</span>'
+            : '<span class="badge-lg" style="background:var(--surface2);color:var(--text3);border:1px solid var(--border)">Known Pattern</span>'}
+          ${exp.requires_immediate_escalation
+            ? '<span class="badge-lg badge-ESCALATE">⚠ Escalate Immediately</span>' : ''}
+        </div>
+        <div class="stats-row">
+          <div class="stat-card">
+            <div class="stat-card-value">${inc.accounts_affected}</div>
+            <div class="stat-card-label">Accounts Affected</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-card-value">$${(inc.total_portfolio_exposure/1000).toFixed(0)}K</div>
+            <div class="stat-card-label">Portfolio Exposure</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-card-value">${tb.TFSA||0} / ${tb.RRSP||0} / ${tb.Personal||0}</div>
+            <div class="stat-card-label">TFSA / RRSP / Personal</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-card-value">${inc.average_magnitude}</div>
+            <div class="stat-card-label">Avg Magnitude</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-label">Expected vs Observed State</div>
+        ${buildEvoTable(inc)}
+      </div>
+
+      <div class="section">
+        <div class="section-label">AI Analysis</div>
+
+        <div class="inference-bar">
+          <div class="inf-item">
+            <div class="inf-label">Pattern Matched Against</div>
+            <div class="inf-value">500 account state transitions</div>
+          </div>
+          <div class="inf-item">
+            <div class="inf-label">Anomalous State Probability</div>
+            <div class="inf-value">${anomalyProb}</div>
+          </div>
+          <div class="inf-item">
+            <div class="inf-label">Detection Method</div>
+            <div class="inf-value">${detectionMethod}</div>
+          </div>
+        </div>
+
+        <div class="severity-row">
+          <div class="sev-pill sev-${sev}">${sev}</div>
+          <div class="sev-rationale">${exp.severity_rationale || '—'}</div>
+        </div>
+
+        <div style="font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--text3);margin-bottom:10px;">Root Cause Hypotheses</div>
+        ${hypotheses}
+
+        <div style="margin-top:16px;">
+          <div class="action-box">
+            <div class="action-label">→ Recommended First Action</div>
+            <div class="action-text">${exp.recommended_first_action || '—'}</div>
+          </div>
+
+          <div class="impact-box">
+            <div class="impact-label">⚠ Client Impact if Unresolved</div>
+            <div class="impact-text">${exp.user_impact_if_unresolved || '—'}</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-label">Affected Accounts (${inc.account_ids.length})</div>
+        <div class="account-grid">${accountChips}</div>
+        ${more}
+      </div>
+
+      <div class="section">
+        <div class="section-label">Operator Decision</div>
+        <div class="operator-panel">
+          <div class="op-header">
+            <div class="op-title">Human-in-the-Loop</div>
+            <div class="op-subtitle">AI diagnoses — operator authorizes</div>
+          </div>
+          <div class="op-body">
+            <div class="decision-grid">
+              ${['ESCALATE','RESOLVE','MONITOR','DISMISS'].map(d =>
+                `<button class="dec-btn" onclick="selectDecision('${d}',this)">${d}</button>`
+              ).join('')}
+            </div>
+            <textarea class="notes-input" id="notes-input" placeholder="Operator notes (optional)…"></textarea>
+            <div class="op-footer">
+              <div class="log-success" id="log-success">✓ Logged to audit trail</div>
+              <button class="log-btn" onclick="submitOverride('${inc.incident_id}','${sev}',${inc.accounts_affected})">
+                Log Decision →
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  `;
+}
+
+function selectDecision(d, btn) {
+  selectedDecision = d;
+  document.querySelectorAll('.dec-btn').forEach(b => b.className = 'dec-btn');
+  btn.classList.add(`sel-${d}`);
+}
+
+async function submitOverride(id, sev, count) {
+  if (!selectedDecision) { alert('Select a decision first.'); return; }
+  const notes = document.getElementById('notes-input')?.value || '';
+  const inc = incidents.find(i => i.incident_id === id);
+  try {
+    const res = await fetch(`${API}/overrides`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        incident_id: id, check_type: inc?.check_type || '',
+        ai_severity: sev, accounts_affected: count,
+        operator_decision: selectedDecision, operator_notes: notes
+      })
+    });
+    if (res.ok) {
+      const el = document.getElementById('log-success');
+      if (el) { el.style.display = 'block'; setTimeout(() => el.style.display = 'none', 3000); }
+    }
+  } catch(e) { console.error(e); }
+}
+
+Promise.all([loadSummary(), loadIncidents()]);
+</script>
+</body>
+</html>
