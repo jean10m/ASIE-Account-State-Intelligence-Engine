@@ -118,6 +118,22 @@ Statistical modeling currently uses synthetic distributions for demonstration pu
 
 ---
 
+## Prototype Interface
+
+### Dashboard Overview
+
+![Dashboard Overview](assets/dashboard_overview.png)
+
+### Incident Detail View
+
+![Incident Detail](assets/incident_detail.png)
+
+### Operator Decision Panel
+
+![Operator Panel](assets/operator_panel.png)
+
+---
+
 ## Scalability Considerations
 
 Production deployment requires attention to:
